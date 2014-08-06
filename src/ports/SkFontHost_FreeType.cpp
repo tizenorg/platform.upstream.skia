@@ -909,6 +909,7 @@ SkScalerContext_FreeType::SkScalerContext_FreeType(SkTypeface* typeface, const S
     } else if (FT_HAS_FIXED_SIZES(fFace)) {
         fStrikeIndex = chooseBitmapStrike(fFace, fScaleY);
         if (fStrikeIndex == -1) {
+            setGenerateImageFromPath(false);
             SkDEBUGF(("no glyphs for font \"%s\" size %f?\n",
                             fFace->family_name,       SkFixedToScalar(fScaleY)));
         } else {
@@ -922,6 +923,7 @@ SkScalerContext_FreeType::SkScalerContext_FreeType(SkTypeface* typeface, const S
             // However, in FreeType 2.5.1 color bitmap only fonts do not ignore this flag.
             // Force this flag off for bitmap only fonts.
             fLoadGlyphFlags &= ~FT_LOAD_NO_BITMAP;
+            setGenerateImageFromPath(true);
         }
     } else {
         SkDEBUGF(("unknown kind of font \"%s\" size %f?\n",
@@ -1145,6 +1147,9 @@ void SkScalerContext_FreeType::generateMetrics(SkGlyph* glyph) {
 
         if (fFace->glyph->bitmap.pixel_mode == FT_PIXEL_MODE_BGRA) {
             glyph->fMaskFormat = SkMask::kARGB32_Format;
+            setGenerateImageFromPath(false);
+        } else {
+            setGenerateImageFromPath(true);
         }
 
         glyph->fWidth   = SkToU16(fFace->glyph->bitmap.width);
