@@ -8,6 +8,10 @@
 #include "SkBlitMask.h"
 #include "SkColor_opts_neon.h"
 
+#if (__GNUC__ == 4 && __GNUC_MINOR__ <= 5)
+#pragma GCC diagnostic ignored "-Wuninitialized"
+#endif
+
 void SkBlitLCD16OpaqueRow_neon(SkPMColor dst[], const uint16_t src[],
                                         SkColor color, int width,
                                         SkPMColor opaqueDst) {
