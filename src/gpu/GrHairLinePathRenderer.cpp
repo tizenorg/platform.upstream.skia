@@ -37,6 +37,8 @@ static const int MAX_LINE_POINTS_PER_CURVE = 2048;  // 16 x 2048 = 32K
 static const int MAX_POINTS = 1 << 11; // 2048
 static const SkScalar gMinCurveTol = 0.0001f;
 int maxPts;
+int prevMaxPts;
+
 GrIndexBuffer* indexBuffer = NULL;
 
 struct HairLineVertex {
@@ -427,6 +429,7 @@ void HairlineBatch::onPrepareDraws(Target* target) {
         Color color(color);
         color.fType = Color::kAttribute_Type;
         Coverage coverage(Coverage::kAttribute_Type);
+        coverage.fCoverage = this->coverage();
         LocalCoords localCoords(this->usesLocalCoords() ? LocalCoords::kUsePosition_Type :
                                                           LocalCoords::kUnused_Type);
         localCoords.fMatrix = geometryProcessorLocalM;
@@ -438,11 +441,13 @@ void HairlineBatch::onPrepareDraws(Target* target) {
     const GrVertexBuffer* vertexBuffer;
     int firstVertex;
     size_t vertexStride = lineGP->getVertexStride();
+    if (maxPts == 0)
+        maxPts = prevMaxPts;
     HairLineVertex* verts = reinterpret_cast<HairLineVertex*>(
             target->makeVertexSpace(vertexStride, maxPts, &vertexBuffer, &firstVertex));
 
     if (!verts || !indexBuffer || !maxPts) {
-        SkDebugf("Could not allocate vertices\n");
+        // SkDebugf("Could not allocate vertices\n");
         maxPts = 0;
         return;
     }
@@ -509,6 +514,7 @@ BREAKLOOP:
                                MAX_POINTS/2);
         target->draw(vertices);
     }
+    prevMaxPts = maxPts;
     maxPts=0;
 }
 
@@ -534,7 +540,7 @@ static GrDrawBatch* create_hairline_batch(GrColor color,
 
     HairlineBatch::Geometry geometry;
     geometry.fColor = color;
-    geometry.fCoverage = coverage;
+    geometry.fCoverage = SkScalarRoundToInt(hairlineCoverage);
     geometry.fViewMatrix = viewMatrix;
     geometry.fPath = path;
     geometry.fDevClipBounds = devClipBounds;
