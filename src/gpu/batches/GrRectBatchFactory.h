@@ -11,6 +11,7 @@
 #include "GrAAFillRectBatch.h"
 #include "GrAAStrokeRectBatch.h"
 #include "GrColor.h"
+#include "GrContext.h"
 #include "GrNonAAFillRectBatch.h"
 #include "GrNonAAStrokeRectBatch.h"
 #include "SkMatrix.h"
@@ -56,8 +57,10 @@ inline GrDrawBatch* CreateNonAAStroke(GrColor color,
                                       const SkMatrix& viewMatrix,
                                       const SkRect& rect,
                                       SkScalar strokeWidth,
-                                      bool snapToPixelCenters) {
-    return GrNonAAStrokeRectBatch::Create(color, viewMatrix, rect, strokeWidth, snapToPixelCenters);
+                                      bool snapToPixelCenters, GrContext *ctx= NULL) {
+    return GrNonAAStrokeRectBatch::Create(color, viewMatrix,
+                                          rect, strokeWidth,
+                                          snapToPixelCenters, ctx);
 }
 
 inline GrDrawBatch* CreateAAStroke(GrColor color,
