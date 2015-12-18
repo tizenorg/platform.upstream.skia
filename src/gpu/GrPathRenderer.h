@@ -213,7 +213,7 @@ public:
         SkASSERT(this->canDrawPath(pathA, pathB, pathC,
                  stroke, target, ds, color, viewMatrix, antiAlias));
         SkASSERT(ds->getStencil().isDisabled() ||
-                 kNoRestriction_StencilSupport == this->getStencilSupport(target, ds, pathA, stroke));
+                 kNoRestriction_StencilSupport == this->getStencilSupport(pathA, stroke));
         return this->onDrawPath(pathA, pathB, pathC, stroke, target, ds, color, viewMatrix, antiAlias);
     }
 
@@ -298,7 +298,7 @@ private:
                                GrDrawTarget*,
                                GrPipelineBuilder* pipelineBuilder,
                                GrColor color,
-                               const SkMatrix& viewMatrix) = 0;
+                               const SkMatrix& viewMatrix) { }
 
     /**
      * Subclass implementation of stencilPath(). Subclass must override iff it ever returns

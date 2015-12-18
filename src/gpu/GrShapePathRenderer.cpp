@@ -164,12 +164,14 @@ private:
 #endif
     }
 
-bool createGeom(void *vertices, const SkPath& outer,
-                                     const SkPath& inner,
-                                     const SkPath& joinsAndCaps,
-                                     SkScalar srcSpaceTol,
-                                     GrPrimitiveType* primType,
-                                     int* vertexCnt) {
+bool createGeom(void *vertices,
+                const SkPath& outer,
+                const SkPath& inner,
+                const SkPath& joinsAndCaps,
+                SkScalar srcSpaceTol,
+                const int maxPts,
+                GrPrimitiveType* primType,
+                int* vertexCnt) {
 
     SkScalar srcSpaceTolSqd = SkScalarMul(srcSpaceTol, srcSpaceTol);
 
@@ -377,6 +379,7 @@ void ShapeBatch::onPrepareDraws(Target* target) {
                         args.fInnerPath,
                         args.fCapsJoinsPath,
                         args.fTolerance,
+                        maxPts,
                         &primType,
                         &vertexCnt)) {
             return;
