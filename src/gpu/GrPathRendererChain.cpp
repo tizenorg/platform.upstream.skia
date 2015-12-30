@@ -145,6 +145,7 @@ GrPathRenderer* GrPathRendererChain::getPathRenderer(const SkPath& pathA,
 void GrPathRendererChain::init() {
     SkASSERT(!fInit);
     const GrCaps& caps = *fOwner->caps();
+    this->addPathRenderer(new GrHairLinePathRenderer)->unref();
     this->addPathRenderer(new GrDashLinePathRenderer)->unref();
 
     if (GrPathRenderer* pr = GrStencilAndCoverPathRenderer::Create(fOwner->resourceProvider(),
@@ -156,7 +157,6 @@ void GrPathRendererChain::init() {
     this->addPathRenderer(new GrAAConvexPathRenderer)->unref();
     this->addPathRenderer(new GrAALinearizingConvexPathRenderer)->unref();
     this->addPathRenderer(new GrAADistanceFieldPathRenderer)->unref();
-    this->addPathRenderer(new GrHairLinePathRenderer)->unref();
     this->addPathRenderer(new GrShapePathRenderer)->unref();
     this->addPathRenderer(new GrDefaultPathRenderer(caps.twoSidedStencilSupport(),
                                                     caps.stencilWrapOpsSupport()))->unref();

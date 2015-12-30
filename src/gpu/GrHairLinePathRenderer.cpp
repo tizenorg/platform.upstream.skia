@@ -33,11 +33,9 @@
 #include "batches/GrVertexBatch.h"
 
 ////////////////////////////////////////////////////////////////////////////////
-static const int MAX_LINE_POINTS_PER_CURVE = 2048;  // 16 x 2048 = 32K
-static const int MAX_POINTS = 1 << 11; // 2048
+static const int MAX_LINE_POINTS_PER_CURVE = 32768;  // 16 x 32768
+static const int MAX_POINTS = 1 << 15; // 32768
 static const SkScalar gMinCurveTol = 0.0001f;
-int maxPts;
-int prevMaxPts;
 
 GrIndexBuffer* indexBuffer = NULL;
 
@@ -441,14 +439,19 @@ void HairlineBatch::onPrepareDraws(Target* target) {
     const GrVertexBuffer* vertexBuffer;
     int firstVertex;
     size_t vertexStride = lineGP->getVertexStride();
-    if (maxPts == 0)
-        maxPts = prevMaxPts;
+
+    int maxPts = 0;
+    for (int i = 0; i < instanceCount; i++) {
+        maxPts += worstCasePointCount(fGeoData[i].fViewMatrix,
+                                      fGeoData[i].fPath,
+                                      fGeoData[i].fTolerance);
+    }
+
     HairLineVertex* verts = reinterpret_cast<HairLineVertex*>(
             target->makeVertexSpace(vertexStride, maxPts, &vertexBuffer, &firstVertex));
 
     if (!verts || !indexBuffer || !maxPts) {
         // SkDebugf("Could not allocate vertices\n");
-        maxPts = 0;
         return;
     }
 
@@ -509,13 +512,15 @@ BREAKLOOP:
     {
         int vertex = static_cast<int>(verts - base);
         GrVertices vertices;
+        size_t ibSize = indexBuffer->gpuMemorySize();
+        int maxInstancesPerDraw = static_cast<int>
+                (ibSize / (sizeof(uint16_t) * (maxPts/instanceCount)));
         vertices.initInstanced(kLines_GrPrimitiveType, vertexBuffer, indexBuffer,
-                               firstVertex, 2, 2, (vertex/2),
-                               MAX_POINTS/2);
+                               firstVertex, maxPts/instanceCount, maxPts/instanceCount,
+                               instanceCount, maxInstancesPerDraw);
+
         target->draw(vertices);
     }
-    prevMaxPts = maxPts;
-    maxPts=0;
 }
 
 static GrDrawBatch* create_hairline_batch(GrColor color,
@@ -560,18 +565,7 @@ bool GrHairLinePathRenderer::canDrawPath(const GrDrawTarget* target,
     bool canDraw = !antiAlias &&
         (stroke.isHairlineStyle() ||
          IsStrokeHairlineOrEquivalent(stroke, viewMatrix, NULL));
-
-    if (canDraw) {
-        SkMatrix viewM = viewMatrix;
-        SkScalar tol = SK_Scalar1;
-        tol = GrPathUtils::scaleToleranceToSrc(tol,
-                                               viewMatrix,
-                                               path.getBounds());
-        int maxPts = worstCasePointCount(viewM, path, tol);
-        ((GrHairLinePathRenderer*)this)->setNumberOfPts(maxPts);
-        return maxPts > 0 && maxPts <= MAX_POINTS;
-    }
-    return false;
+    return canDraw;
 }
 
 bool GrHairLinePathRenderer::onDrawPath(GrDrawTarget* drawTarget,
@@ -584,10 +578,6 @@ bool GrHairLinePathRenderer::onDrawPath(GrDrawTarget* drawTarget,
     SkIRect devClipBounds;
     pipelineBuilder->clip().getConservativeBounds(pipelineBuilder->getRenderTarget(),
                                                   &devClipBounds);
-
-    maxPts += fNumPts;
-    if (!maxPts)
-        return false;
 
     GrContext* context = pipelineBuilder->getRenderTarget()->getContext();
     indexBuffer = getIndexBuffer(context->getGpu());
