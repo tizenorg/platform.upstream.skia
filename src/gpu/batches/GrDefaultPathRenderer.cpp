@@ -22,6 +22,8 @@
 
 #include "batches/GrVertexBatch.h"
 
+#define CURVE_VERTICES 500
+
 GrDefaultPathRenderer::GrDefaultPathRenderer(bool separateStencilSupport,
                                              bool stencilWrapOpsSupport)
     : fSeparateStencil(separateStencilSupport)
@@ -451,6 +453,9 @@ private:
 
             SkPath::Iter iter(path, false);
 
+            SkPoint firstMove;
+            int count = 0;
+            bool circShift = 0;
             bool done = false;
             while (!done) {
                 SkPath::Verb verb = iter.next(pts);
@@ -462,6 +467,7 @@ private:
                             ++subpath;
                         }
                         *vert = pts[0];
+                        firstMove = pts[0];
                         vert++;
                         break;
                     case SkPath::kLine_Verb:
@@ -470,7 +476,14 @@ private:
                             append_countour_edge_indices(this->isHairline(), subpathIdxStart,
                                                          prevIdx, &idx);
                         }
-                        *(vert++) = pts[1];
+                        // line verb is followed by move.
+                        if (count == 1 && iter.isClosedContour()) {
+                            *(--vert) = pts[1];
+                            vert++;
+                            circShift = 1;
+                        } else {
+                            *(vert++) = pts[1];
+                        }
                         break;
                     case SkPath::kConic_Verb: {
                         SkScalar weight = iter.conicWeight();
@@ -510,8 +523,13 @@ private:
                         done = true;
                 }
                 first = false;
+                count++;
             }
 
+            if (circShift) {
+                *vert = firstMove;
+                vert++;
+            }
             *vertexCnt = static_cast<int>(vert - base);
             *indexCnt = static_cast<int>(idx - idxBase);
 
@@ -564,7 +582,9 @@ bool GrDefaultPathRenderer::internalDrawPath(GrDrawTarget* target,
     const bool isHairline = stroke->isHairlineStyle();
 
     // Save the current xp on the draw state so we can reset it if needed
-    SkAutoTUnref<const GrXPFactory> backupXPFactory(SkRef(pipelineBuilder->getXPFactory()));
+    const GrXPFactory* xpFactory = pipelineBuilder->getXPFactory();
+    SkAutoTUnref<const GrXPFactory> backupXPFactory(SkSafeRef(xpFactory));
+
     // face culling doesn't make sense here
     SkASSERT(GrPipelineBuilder::kBoth_DrawFace == pipelineBuilder->getDrawFace());
 
@@ -695,7 +715,22 @@ bool GrDefaultPathRenderer::internalDrawPath(GrDrawTarget* target,
             }
             const SkMatrix& viewM = (reverse && viewMatrix.hasPerspective()) ? SkMatrix::I() :
                                                                                viewMatrix;
-            target->drawNonAARect(*pipelineBuilder, color, viewM, bounds, localMatrix);
+
+            // Temporarily do not use drawNonAARect for filltypes except kInverseWinding_FillType,
+            // as it causes incorrect results.
+            if (reverse) {
+                target->drawNonAARect(*pipelineBuilder, color, viewM, bounds, localMatrix);
+            } else {
+                DefaultPathBatch::Geometry geometry;
+                geometry.fColor = color;
+                geometry.fPath = path;
+                geometry.fTolerance = srcSpaceTol;
+
+                SkAutoTUnref<GrDrawBatch> batch(DefaultPathBatch::Create(geometry, newCoverage,
+                                                                         viewM, isHairline,
+                                                                         bounds));
+                target->drawBatch(*pipelineBuilder, batch);
+            }
         } else {
             if (passCount > 1) {
                 pipelineBuilder->setDisableColorXPFactory();
@@ -718,6 +753,16 @@ bool GrDefaultPathRenderer::internalDrawPath(GrDrawTarget* target,
 
 bool GrDefaultPathRenderer::onCanDrawPath(const CanDrawPathArgs& args) const {
     // this class can draw any path with any fill but doesn't do any anti-aliasing.
+    SkScalar tol = GrPathUtils::kDefaultTolerance;
+    SkPath path = *args.fPath;
+    SkScalar srcSpaceTol = GrPathUtils::scaleToleranceToSrc(tol, *args.fViewMatrix,
+                                                            path.getBounds());
+
+    int contourCount;
+    int maxVertices = GrPathUtils::worstCasePointCount(*args.fPath, &contourCount,
+                                                       srcSpaceTol);
+    if(maxVertices > CURVE_VERTICES)
+        return false;
     return !args.fAntiAlias && (args.fStroke->isFillStyle() ||
                                 IsStrokeHairlineOrEquivalent(*args.fStroke, *args.fViewMatrix,
                                                              nullptr));

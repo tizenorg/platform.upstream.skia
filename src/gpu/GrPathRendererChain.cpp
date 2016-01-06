@@ -152,7 +152,6 @@ void GrPathRendererChain::init() {
                                                                    caps)) {
         this->addPathRenderer(pr)->unref();
     }
-    this->addPathRenderer(new GrTessellatingPathRenderer)->unref();
     this->addPathRenderer(new GrAAHairLinePathRenderer)->unref();
     this->addPathRenderer(new GrAAConvexPathRenderer)->unref();
     this->addPathRenderer(new GrAALinearizingConvexPathRenderer)->unref();
@@ -160,5 +159,6 @@ void GrPathRendererChain::init() {
     this->addPathRenderer(new GrShapePathRenderer)->unref();
     this->addPathRenderer(new GrDefaultPathRenderer(caps.twoSidedStencilSupport(),
                                                     caps.stencilWrapOpsSupport()))->unref();
+    this->addPathRenderer(new GrTessellatingPathRenderer)->unref();
     fInit = true;
 }
