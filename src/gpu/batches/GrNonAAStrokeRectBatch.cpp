@@ -190,7 +190,8 @@ private:
             SkDebugf("Could not allocate vertices\n");
             return;
         }
-        GrPrimitiveType primType;
+
+        GrPrimitiveType primType = kTriangleStrip_GrPrimitiveType;
         RectVertex* vertex = reinterpret_cast<RectVertex*>(verts);
         SkPoint* s_vertex = reinterpret_cast<SkPoint*>(verts);
         for (int i = 0; i < instanceCount; i++) {
