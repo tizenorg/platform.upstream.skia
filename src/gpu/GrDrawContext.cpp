@@ -209,7 +209,8 @@ void GrDrawContext::drawRect(GrRenderTarget* rt,
                              const GrPaint& paint,
                              const SkMatrix& viewMatrix,
                              const SkRect& rect,
-                             const GrStrokeInfo* strokeInfo) {
+                             const GrStrokeInfo* strokeInfo,
+                             bool isLine) {
     RETURN_IF_ABANDONED
     if (strokeInfo && strokeInfo->isDashed()) {
         SkPath path;
@@ -297,7 +298,8 @@ void GrDrawContext::drawRect(GrRenderTarget* rt,
                                         rect,
                                         width,
                                         snapToPixelCenters,
-                                        pipelineBuilder.getRenderTarget()->getContext()));
+                                        pipelineBuilder.getRenderTarget()->getContext(),
+                                        isLine));
 
         // Depending on sub-pixel coordinates and the particular GPU, we may lose a corner of
         // hairline rects. We jam all the vertices to pixel centers to avoid this, but not when MSAA

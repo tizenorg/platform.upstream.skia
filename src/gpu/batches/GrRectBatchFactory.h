@@ -57,10 +57,12 @@ inline GrDrawBatch* CreateNonAAStroke(GrColor color,
                                       const SkMatrix& viewMatrix,
                                       const SkRect& rect,
                                       SkScalar strokeWidth,
-                                      bool snapToPixelCenters, GrContext *ctx= NULL) {
+                                      bool snapToPixelCenters,
+                                      GrContext *ctx= NULL,
+                                      bool isLine = false) {
     return GrNonAAStrokeRectBatch::Create(color, viewMatrix,
                                           rect, strokeWidth,
-                                          snapToPixelCenters, ctx);
+                                          snapToPixelCenters, ctx, isLine);
 }
 
 inline GrDrawBatch* CreateAAStroke(GrColor color,

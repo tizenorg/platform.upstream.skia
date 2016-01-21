@@ -128,9 +128,10 @@ public:
         this->joinBounds(bounds);
     }
 
-    void init(bool snapToPixelCenters) {
+    void init(bool snapToPixelCenters, bool isLine) {
         const Geometry& geo = fGeoData[0];
         fBatch.fHairline = geo.fStrokeWidth == 1;
+        fBatch.fIsLine = isLine;
 
         // setup bounds
         this->setupBounds(&fBounds, geo, snapToPixelCenters);
@@ -150,7 +151,6 @@ private:
     }
 
     void onPrepareDraws(Target* target) override {
-
         Geometry& args = fGeoData[0];
         SkAutoTUnref<const GrGeometryProcessor> gp;
         {
@@ -202,34 +202,75 @@ private:
             } else {
                 args = fGeoData[i];
                 SkRect localrect = args.fRect;
-                if(instanceCount > 1)
-                    args.fViewMatrix.mapRect(&localrect, args.fRect);
+                SkPoint p1,p2,p3,p4;
+                SkPoint q1,q2,q3,q4;
+                if(instanceCount > 1) {
+                    if (!fBatch.fIsLine) {
+                        args.fViewMatrix.mapRect(&localrect, args.fRect);
+                    } else {
+                        SkRect rect = args.fRect;
+                        p1.set(rect.fLeft, rect.fTop);
+                        args.fViewMatrix.mapPoints(&q1, &p1, 2);
+                        p2.set(rect.fRight,rect.fBottom);
+                        args.fViewMatrix.mapPoints(&q2, &p2, 2);
+                        p3.set(rect.fLeft, rect.fTop);
+                        args.fViewMatrix.mapPoints(&q3, &p3, 2);
+                        p4.set(rect.fRight, rect.fBottom);
+                        args.fViewMatrix.mapPoints(&q4, &p4, 2);
+                    }
+                }
                 primType = kLines_GrPrimitiveType;
-
-                (*vertex).pt.set(localrect.fLeft, localrect.fTop);
-                (*vertex).color = args.fColor;
-                vertex++;
-                (*vertex).pt.set(localrect.fRight, localrect.fTop);
-                (*vertex).color = args.fColor;
-                vertex++;
-                (*vertex).pt.set(localrect.fLeft, localrect.fTop);
-                (*vertex).color = args.fColor;
-                vertex++;
-                (*vertex).pt.set(localrect.fLeft, localrect.fBottom);
-                (*vertex).color = args.fColor;
-                vertex++;
-                (*vertex).pt.set(localrect.fLeft, localrect.fBottom);
-                (*vertex).color = args.fColor;
-                vertex++;
-                (*vertex).pt.set(localrect.fRight, localrect.fBottom);
-                (*vertex).color = args.fColor;
-                vertex++;
-                (*vertex).pt.set(localrect.fRight, localrect.fBottom);
-                (*vertex).color = args.fColor;
-                vertex++;
-                (*vertex).pt.set(localrect.fRight, localrect.fTop);
-                (*vertex).color = args.fColor;
-                vertex++;
+                if (!fBatch.fIsLine) {
+                    (*vertex).pt.set(localrect.fLeft, localrect.fTop);
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt.set(localrect.fRight, localrect.fTop);
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt.set(localrect.fLeft, localrect.fTop);
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt.set(localrect.fLeft, localrect.fBottom);
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt.set(localrect.fLeft, localrect.fBottom);
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt.set(localrect.fRight, localrect.fBottom);
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt.set(localrect.fRight, localrect.fBottom);
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt.set(localrect.fRight, localrect.fTop);
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                } else {
+                    (*vertex).pt = q1;
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt = q2;
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt = q2;
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt = q3;
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt = q3;
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt = q4;
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt = q4;
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                    (*vertex).pt = q1;
+                    (*vertex).color = args.fColor;
+                    vertex++;
+                }
             }
         }
         GrVertices vertices;
@@ -317,6 +358,7 @@ private:
         bool fColorIgnored;
         bool fCoverageIgnored;
         bool fHairline;
+        bool fIsLine;
     };
 
     const static int kVertsPerHairlineRect = 8;
@@ -335,12 +377,13 @@ GrDrawBatch* Create(GrColor color,
                     const SkRect& rect,
                     SkScalar strokeWidth,
                     bool snapToPixelCenters,
-                    GrContext *ctx) {
+                    GrContext *ctx,
+                    bool isLine) {
     NonAAStrokeRectBatch* batch = NonAAStrokeRectBatch::Create();
     if (ctx)
         indexBuffer_1 = getIndexBuffer_1(ctx->getGpu());
     batch->append(color, viewMatrix, rect, strokeWidth);
-    batch->init(snapToPixelCenters);
+    batch->init(snapToPixelCenters, isLine);
     return batch;
 }
 

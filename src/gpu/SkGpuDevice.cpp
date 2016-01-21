@@ -710,6 +710,30 @@ static SkBitmap wrap_texture(GrTexture* texture, int width, int height) {
 void SkGpuDevice::drawPath(const SkDraw& draw, const SkPath& origSrcPath,
                            const SkPaint& paint, const SkMatrix* prePathMatrix,
                            bool pathIsMutable) {
+
+    GrPaint grPaint;
+    if (!SkPaintToGrPaint(fContext, paint, *draw.fMatrix, &grPaint)) {
+        return;
+    }
+    GrStrokeInfo strokeInfo(paint);
+
+    SkPoint unmapped[4];
+    GrColor color = grPaint.getColor();
+    bool isScale =  !(draw.fMatrix->getType() & ~(SkMatrix::kScale_Mask));
+    if (origSrcPath.isLine (unmapped) && grPaint.isConstantBlendedColor(&color) &&
+        (strokeInfo.isHairlineStyle() || strokeInfo.getWidth() == 1) && isScale &&
+         !(paint.getMaskFilter() || paint.getPathEffect()) && !origSrcPath.isInverseFillType()) {
+        SkRect rect;
+        rect.fLeft = unmapped[0].fX;
+        rect.fTop = unmapped[0].fY;
+        rect.fRight = unmapped[1].fX;
+        rect.fBottom = unmapped[1].fY;
+
+        fDrawContext->drawRect(fRenderTarget, fClip, grPaint,
+                               *draw.fMatrix, rect, &strokeInfo, true);
+        return;
+    }
+
     CHECK_FOR_ANNOTATION(paint);
     CHECK_SHOULD_DRAW(draw);
 

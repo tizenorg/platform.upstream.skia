@@ -23,7 +23,8 @@ GrDrawBatch* Create(GrColor color,
                     const SkRect& rect,
                     SkScalar strokeWidth,
                     bool snapToPixelCenters,
-                    GrContext *ctx);
+                    GrContext *ctx,
+                    bool isLine = false);
 
 void Append(GrColor color,
             const SkMatrix& viewMatrix,

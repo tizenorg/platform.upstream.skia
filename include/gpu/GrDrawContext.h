@@ -108,7 +108,8 @@ public:
                   const GrPaint& paint,
                   const SkMatrix& viewMatrix,
                   const SkRect&,
-                  const GrStrokeInfo* strokeInfo = NULL);
+                  const GrStrokeInfo* strokeInfo = NULL,
+                  bool isLine = false);
 
     /**
      * Maps a rectangle of shader coordinates to a rectangle and draws that rectangle
