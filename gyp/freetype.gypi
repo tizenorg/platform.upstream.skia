@@ -49,11 +49,11 @@
     'FT2_BUILD_LIBRARY',
   ],
   'conditions': [
-    [ 'skia_warnings_as_errors', {
-      'cflags!': [
-        '-Werror',
-      ],
-    }],
+#    [ 'skia_warnings_as_errors', {
+#      'cflags!': [
+#        '-Werror',
+#      ],
+#    }],
     [ 'skia_os == "mac"', {
       'sources': [
         '../third_party/externals/freetype/src/base/ftmac.c',        # only on the Macintosh
