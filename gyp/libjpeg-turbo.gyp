@@ -7,6 +7,7 @@
     'SYMROOT': '<(DEPTH)/xcodebuild',
   },
   'variables': {
+    'skia_arch_type': 'arm',
     'shared_generated_dir': '<(SHARED_INTERMEDIATE_DIR)/third_party/externals/libjpeg-turbo',
     'conditions': [
       [ 'skia_os == "win"', {
