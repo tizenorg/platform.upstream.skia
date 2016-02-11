@@ -1,0 +1,33 @@
+[submodule "third_party/externals/fontconf/src"]
+	path = third_party/externals/fontconf/src
+	url = https://chromium.googlesource.com/external/fontconfig.git
+[submodule "third_party/externals/giflib"]
+	path = third_party/externals/giflib
+	url = https://android.googlesource.com/platform/external/giflib.git
+[submodule "third_party/externals/gyp"]
+	path = third_party/externals/gyp
+	url = https://chromium.googlesource.com/external/gyp.git
+[submodule "third_party/externals/jsoncpp"]
+	path = third_party/externals/jsoncpp
+	url = https://chromium.googlesource.com/external/github.com/open-source-parsers/jsoncpp.git
+[submodule "third_party/externals/libjpeg-turbo"]
+	path = third_party/externals/libjpeg-turbo
+	url = https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git
+[submodule "third_party/externals/libpng"]
+	path = third_party/externals/libpng
+	url = https://skia.googlesource.com/third_party/libpng.git
+[submodule "third_party/externals/libwebp"]
+	path = third_party/externals/libwebp
+	url = https://chromium.googlesource.com/webm/libwebp.git
+[submodule "third_party/externals/nanomsg"]
+	path = third_party/externals/nanomsg
+	url = https://skia.googlesource.com/third_party/nanomsg.git
+[submodule "third_party/externals/sfntly"]
+	path = third_party/externals/sfntly
+	url = https://chromium.googlesource.com/external/sfntly/cpp/src.git
+[submodule "third_party/externals/yasm/source/patched-yasm"]
+	path = third_party/externals/yasm/source/patched-yasm
+	url = https://chromium.googlesource.com/chromium/deps/yasm/patched-yasm.git
+[submodule "third_party/externals/icu"]
+	path = third_party/externals/icu
+	url = https://chromium.googlesource.com/chromium/deps/icu.git

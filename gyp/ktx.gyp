@@ -10,6 +10,7 @@
   {
     'target_name': 'libSkKTX',
     'type': 'static_library',
+    'standalone_static_library': 1,
     'include_dirs' : [
       '../third_party/ktx',
       '../include/gpu',

@@ -110,7 +110,7 @@
         '../third_party/externals/libpng/arm/filter_neon_intrinsics.c',
       ],
       'conditions': [
-        ['arm_neon_optional', {
+        ['arm_neon_optional and skia_arch_type != "arm64"', {
           'cflags': [
             '-mfpu=neon',
           ],

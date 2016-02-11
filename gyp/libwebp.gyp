@@ -111,7 +111,7 @@
             'libwebp_skia.gypi',
           ],
           'conditions': [
-            ['arm_version == 7', {
+            ['arm_version == 7 and skia_arch_type != "arm64"', {
               'cflags': [ '-mfpu=neon' ],
             }],
             ['arm_version >= 7', {
