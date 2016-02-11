@@ -236,10 +236,10 @@
             'conditions': [
               [ 'skia_arch_type == "x86_64" and not skia_android_framework', {
                 'cflags': [
-                  '-m64',
+#                  '-m64',
                 ],
                 'ldflags': [
-                  '-m64',
+#                  '-m64',
                 ],
               }],
               [ 'skia_arch_type == "x86" and not skia_android_framework', {
@@ -252,11 +252,11 @@
               }],
             ],
           }],
-          [ 'skia_warnings_as_errors', {
-            'cflags': [
-              '-Werror',
-            ],
-          }],
+#          [ 'skia_warnings_as_errors', {
+#            'cflags': [
+#              '-Werror',
+#            ],
+#          }],
           # For profiling; reveals some costs, exaggerates others (e.g. trivial setters & getters).
           [ 'skia_disable_inlining', {
             'cflags': [
@@ -392,7 +392,7 @@
     [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"]',
       {
         'defines': [
-          'SK_SAMPLES_FOR_X',
+#          'SK_SAMPLES_FOR_X',
           'SK_BUILD_FOR_UNIX',
         ],
         'configurations': {

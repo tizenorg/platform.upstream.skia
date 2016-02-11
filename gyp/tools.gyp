@@ -38,8 +38,8 @@
         'skpmaker',
         'imgslice',
         'test_image_decoder',
-        'test_public_includes',
-        'whitelist_typefaces',
+#        'test_public_includes',
+#        'whitelist_typefaces',
       ],
       'conditions': [
         ['skia_shared_lib',

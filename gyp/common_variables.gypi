@@ -59,7 +59,8 @@
           }],
         ],
         'arm_version%': 0,
-        'arm_neon%': 0,
+#        'arm_neon%': 0,
+        'arm_neon%': 1,
         'skia_egl%': 0,
       },
 
@@ -67,8 +68,10 @@
       # so that siblings of the level-2 'variables' dict can see them.
       # (skia_os will depend on skia_android_framework.)
       'skia_android_framework%': '<(skia_android_framework)',
-      'skia_arch_type%': '<(skia_arch_type)',
-      'arm_version%': '<(arm_version)',
+#      'skia_arch_type%': '<(skia_arch_type)',
+      'skia_arch_type%': 'arm',
+#      'arm_version%': '<(arm_version)',
+      'arm_version%': '7',
       'arm_neon%': '<(arm_neon)',
       'skia_egl%': '<(skia_egl)',
 
@@ -193,7 +196,8 @@
     # so that siblings of the level-1 'variables' dict can see them.
     'arm_version%': '<(arm_version)',
     'arm_neon%': '<(arm_neon)',
-    'arm_neon_optional%': 0,
+#    'arm_neon_optional%': 0,
+    'arm_neon_optional%': 1,
     'mips_arch_variant%': 'mips32',
     'mips_dsp%': 0,
     'skia_os%': '<(skia_os)',

@@ -76,7 +76,7 @@ static void client(const char* skpPath, const char* dataEndpoint) {
     SkAutoTUnref<const SkData> skp(SkData::NewFromFileName(skpPath));
     if (!skp) {
         SkDebugf("Couldn't read %s\n", skpPath);
-        exit(1);
+//        exit(1);
     }
     SkMemoryStream stream(skp->data(), skp->size());
     SkAutoTUnref<SkPicture> picture(SkPicture::CreateFromStream(&stream));

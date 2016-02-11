@@ -7,6 +7,7 @@
 
 {
   'includes': [
+    'skia_tizen.gypi',
     'common_variables.gypi',
   ],
 

@@ -10,6 +10,7 @@
   {
     'target_name': 'libetc1',
     'type': 'static_library',
+    'standalone_static_library': 1,
     'include_dirs' : [
       '../third_party/etc1'
     ],
