@@ -24,7 +24,7 @@
           # debugger is not supported on this platform
         }, {
           'dependencies': [
-            'debugger.gyp:debugger',
+#            'debugger.gyp:debugger',
             #'v8.gyp:SkV8Example',
           ],
         }],

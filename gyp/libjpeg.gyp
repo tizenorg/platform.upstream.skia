@@ -10,7 +10,7 @@
 
 {
   'variables': {
-    'use_system_libjpeg%': 0,
+    'use_system_libjpeg%': 1,
     'skia_warnings_as_errors': 0,
   },
   'conditions': [
