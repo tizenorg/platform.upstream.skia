@@ -49,6 +49,13 @@
             ],
           },
         ],
+        ['not test',
+          {
+            'dependencies!': [
+              'test_public_includes',
+            ],
+          },
+        ],
       ],
     },
     {

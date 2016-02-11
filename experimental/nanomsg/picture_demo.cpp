@@ -13,6 +13,9 @@
 #include "SkRandom.h"
 #include "SkStream.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 __SK_FORCE_IMAGE_DECODER_LINKING;
 
 // To keep things simple, PictureHeader is fixed-size POD.
