@@ -44,6 +44,14 @@
       'conditions': [
         [ 'skia_os != "win"', {
           'type': 'none',
+          'include_dirs': [
+            '../third_party/externals/zlib/',
+          ],
+          'direct_dependent_settings': {
+            'include_dirs': [
+              '../third_party/externals/zlib',
+            ],
+          },
         }, {
           # win
           'type': 'static_library',

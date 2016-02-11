@@ -54,6 +54,8 @@
           'type': 'shared_library',
         }, {
           'type': 'none',
+          'type': 'static_library',
+          'standalone_static_library': 1,
         }],
       ],
       'dependencies': [

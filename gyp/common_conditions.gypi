@@ -234,7 +234,7 @@
           [ 'skia_fast', { 'cflags': [ '<@(skia_fast_flags)' ] }],
           [ 'skia_os != "chromeos"', {
             'conditions': [
-              [ 'skia_arch_type == "x86_64" and not skia_android_framework', {
+              [ 'skia_arch_type == "x86_64" and not skia_android_framework and building_for_tizen!=1', {
                 'cflags': [
                   '-m64',
                 ],

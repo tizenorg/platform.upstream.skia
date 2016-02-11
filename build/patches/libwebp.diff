@@ -1,0 +1,22 @@
+diff --git a/third_party/externals/libwebp/src/dsp/dsp.h b/third_party/externals/libwebp/src/dsp/dsp.h
+index 95f1ce0..79d6742 100644
+--- a/third_party/externals/libwebp/src/dsp/dsp.h
++++ b/third_party/externals/libwebp/src/dsp/dsp.h
+@@ -54,7 +54,7 @@ extern "C" {
+ // Files containing intrinsics will need to be built targeting the instruction
+ // set so should succeed on one of the earlier tests.
+ #if defined(__SSE2__) || defined(WEBP_MSC_SSE2) || defined(WEBP_HAVE_SSE2)
+-#define WEBP_USE_SSE2
++//#define WEBP_USE_SSE2
+ #endif
+ 
+ #if defined(__SSE4_1__) || defined(WEBP_MSC_SSE41) || defined(WEBP_HAVE_SSE41)
+@@ -73,7 +73,7 @@ extern "C" {
+ // inline assembly would need to be modified for use with Native Client.
+ #if (defined(__ARM_NEON__) || defined(WEBP_ANDROID_NEON) || \
+      defined(__aarch64__)) && !defined(__native_client__)
+-#define WEBP_USE_NEON
++//#define WEBP_USE_NEON
+ #endif
+ 
+ #if defined(_MSC_VER) && _MSC_VER >= 1700 && defined(_M_ARM)

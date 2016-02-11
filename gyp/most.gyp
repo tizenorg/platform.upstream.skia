@@ -70,7 +70,15 @@
               'visualbench.gyp:visualbench',
             ]
           }
-        ]
+        ],
+        [ 'test == 0', {
+          'dependencies!': [
+            'bench.gyp:*',
+            'pathops_unittest.gyp:*',
+            'pathops_skpclip.gyp:*',
+            'dm.gyp:dm',
+          ]
+        }],
       ],
     },
   ],
