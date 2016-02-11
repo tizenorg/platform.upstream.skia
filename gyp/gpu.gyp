@@ -5,6 +5,10 @@
 # GYP for building gpu
 {
   'target_defaults': {
+    'variables': {
+      'skia_egl': 1,
+      'skia_os': 'linux',
+    },
     'conditions': [
       ['skia_os != "win"', {
         'sources/': [ ['exclude', '_win.(h|cpp)$'],
@@ -83,6 +87,9 @@
       'product_name': 'skia_skgpu',
       'type': 'static_library',
       'standalone_static_library': 1,
+      'variables': {
+        'skia_egl': 1,
+      },
       'dependencies': [
         'core.gyp:*',
         'utils.gyp:utils',

@@ -14,7 +14,8 @@
 
 static GrGLFuncPtr egl_get_gl_proc(void* ctx, const char name[]) {
     SkASSERT(nullptr == ctx);
-    return eglGetProcAddress(name);
+//    return eglGetProcAddress(name);
+    return NULL;
 }
 
 const GrGLInterface* GrGLCreateNativeInterface() {

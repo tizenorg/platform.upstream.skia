@@ -31,12 +31,16 @@
         '../src/utils',
         '../include/utils',
       ],
+      'variables': {
+        'skia_arch_type': 'arm',
+        'arm_version': 7,
+      },
       'conditions': [
-        [ '"x86" in skia_arch_type and skia_os != "ios"', {
-          'cflags': [ '-msse2' ],
-          'dependencies': [ 'opts_ssse3', 'opts_sse41', 'opts_sse42', 'opts_avx', 'opts_avx2' ],
-          'sources': [ '<@(sse2_sources)' ],
-        }],
+#        [ '"x86" in skia_arch_type and skia_os != "ios"', {
+#          'cflags': [ '-msse2' ],
+#          'dependencies': [ 'opts_ssse3', 'opts_sse41', 'opts_sse42', 'opts_avx', 'opts_avx2' ],
+#          'sources': [ '<@(sse2_sources)' ],
+#        }],
 
         [ 'skia_arch_type == "mips"', {
           'conditions': [
@@ -97,7 +101,7 @@
       'sources': [ '<@(ssse3_sources)' ],
       'conditions': [
         [ 'skia_os == "win"', { 'defines' : [ 'SK_CPU_SSE_LEVEL=31' ] }],
-        [ 'not skia_android_framework', { 'cflags': [ '-mssse3' ] }],
+#        [ 'not skia_android_framework', { 'cflags': [ '-mssse3' ] }],
       ],
     },
     {
@@ -115,7 +119,7 @@
       'xcode_settings': { 'GCC_ENABLE_SSE41_EXTENSIONS': 'YES' },
       'conditions': [
         [ 'skia_os == "win"', { 'defines' : [ 'SK_CPU_SSE_LEVEL=41' ] }],
-        [ 'not skia_android_framework', { 'cflags': [ '-msse4.1' ] }],
+#        [ 'not skia_android_framework', { 'cflags': [ '-msse4.1' ] }],
       ],
     },
     {
@@ -133,7 +137,7 @@
       'xcode_settings': { 'GCC_ENABLE_SSE42_EXTENSIONS': 'YES' },
       'conditions': [
         [ 'skia_os == "win"', { 'defines' : [ 'SK_CPU_SSE_LEVEL=42' ] }],
-        [ 'not skia_android_framework', { 'cflags': [ '-msse4.2' ] }],
+#        [ 'not skia_android_framework', { 'cflags': [ '-msse4.2' ] }],
       ],
     },
     {
@@ -151,7 +155,7 @@
       'msvs_settings': { 'VCCLCompilerTool': { 'EnableEnhancedInstructionSet': '3' } },
       'xcode_settings': { 'OTHER_CFLAGS': [ '-mavx' ] },
       'conditions': [
-        [ 'not skia_android_framework', { 'cflags': [ '-mavx' ] }],
+#        [ 'not skia_android_framework', { 'cflags': [ '-mavx' ] }],
       ],
     },
     {
@@ -169,7 +173,7 @@
       'msvs_settings': { 'VCCLCompilerTool': { 'EnableEnhancedInstructionSet': '5' } },
       'xcode_settings': { 'OTHER_CFLAGS': [ '-mavx2' ] },
       'conditions': [
-        [ 'not skia_android_framework', { 'cflags': [ '-mavx2' ] }],
+#        [ 'not skia_android_framework', { 'cflags': [ '-mavx2' ] }],
       ],
     },
     {

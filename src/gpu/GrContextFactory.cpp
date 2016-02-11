@@ -39,7 +39,7 @@ GrContext* GrContextFactory::get(GLContextType type, GrGLStandard forcedGpuAPI) 
     switch (type) {
         case kNVPR_GLContextType: // fallthru
         case kNative_GLContextType:
-            glCtx.reset(SkCreatePlatformGLContext(forcedGpuAPI));
+//            glCtx.reset(SkCreatePlatformGLContext(forcedGpuAPI));
             break;
 #ifdef SK_ANGLE
         case kANGLE_GLContextType:
