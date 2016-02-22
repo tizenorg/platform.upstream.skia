@@ -55,6 +55,8 @@ GrPipelineBuilder::GrPipelineBuilder(const GrPaint& paint, GrRenderTarget* rt, c
     this->fIsOpaque = paint.isConstantBlendedColor(&color);
     this->setState(GrPipelineBuilder::kHWAntialias_Flag,
                    rt->isUnifiedMultisampled() && paint.isAntiAlias());
+    fUseStencilBufferForWindingRules = true;
+    fClipBitsOverWrite = false;
 }
 
 //////////////////////////////////////////////////////////////////////////////s
