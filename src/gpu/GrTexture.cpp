@@ -15,6 +15,8 @@
 #include "GrTexture.h"
 #include "GrTexturePriv.h"
 
+#define GPU_MEMORY_OPTIMIZATION
+
 void GrTexture::dirtyMipMaps(bool mipMapsDirty) {
     if (mipMapsDirty) {
         if (kValid_MipMapsStatus == fMipMapsStatus) {
@@ -85,11 +87,16 @@ GrTexture::GrTexture(GrGpu* gpu, LifeCycle lifeCycle, const GrSurfaceDesc& desc)
     : INHERITED(gpu, lifeCycle, desc)
     , fMipMapsStatus(kNotAllocated_MipMapsStatus) {
 
+    // Currently donot generate scratch key for gpu resource.
+    // On not generating scratch key, the gpu resource is not cachable in
+    // scratch pool, which reduces 3D memory consumption.
+#ifndef GPU_MEMORY_OPTIMIZATION
     if (!this->isExternal() && !GrPixelConfigIsCompressed(desc.fConfig)) {
         GrScratchKey key;
         GrTexturePriv::ComputeScratchKey(desc, &key);
         this->setScratchKey(key);
     }
+#endif
     // only make sense if alloc size is pow2
     fShiftFixedX = 31 - SkCLZ(fDesc.fWidth);
     fShiftFixedY = 31 - SkCLZ(fDesc.fHeight);
