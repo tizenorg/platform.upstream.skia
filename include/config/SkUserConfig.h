@@ -133,6 +133,12 @@
         #define SK_A32_SHIFT    24
 #endif
 
+/* Correct byte ordering for Skia standalone to work with Chromium.
+ */
+#define SK_A32_SHIFT    24
+#define SK_R32_SHIFT    16
+#define SK_G32_SHIFT    8
+#define SK_B32_SHIFT    0
 
 /* Determines whether to build code that supports the GPU backend. Some classes
    that are not GPU-specific, such as SkShader subclasses, have optional code
