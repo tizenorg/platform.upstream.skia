@@ -40,7 +40,7 @@ Source1:    skia.manifest
 %define chromium_efl_tizen_profile ivi
 %endif
 
-BuildRequires: expat-devel, python, python-xml, git, curl
+BuildRequires: expat-devel, python, python-xml, git
 %ifarch armv7l
 BuildRequires: python-accel-armv7l-cross-arm
 %endif
@@ -78,16 +78,6 @@ This is skia library.
 if [ ! -d %{buildroot}/../../OTHER/ -a -f /opt/testing/bin/rpmlint ]; then
   mkdir -p %{buildroot}/../../OTHER/
 fi
-
-%if "%{?_hq_proxy}" == "1"
-echo "* Setup HQ proxy"
-export http_proxy="http://10.112.1.184:8080"
-export https_proxy="https://10.112.1.184:8080"
-%endif
-
-%if "%{?_skip_module}" != "1"
-build/get_third_party_modules.sh
-%endif
 
 build/apply_patches.sh
 trap 'build/apply_patches.sh -r' EXIT
