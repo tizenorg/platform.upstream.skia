@@ -12,7 +12,7 @@ function error_report() {
 
 function getHostArch() {
   echo $(uname -m | sed -e \
-      's/i.86/ia32/;s/x86_64/x64/;s/amd64/x64/;s/arm.*/arm/;s/i86pc/ia32/;s/aarch64/arm64/')
+      's/i.86/x86/;s/amd64/x64/;s/arm.*/arm/;s/i86pc/ia32/;s/aarch64/arm64/')
 }
 
 function setupAndExecuteTargetBuild() {
@@ -30,11 +30,11 @@ function setupAndExecuteTargetBuild() {
 
   if [ "$PROFILE" == "" ]; then
     if [[ $platform == "mobile" ]]; then
-      PROFILE=tzmb_v3.0_arm64-wayland
+      PROFILE=tzmb_v3.0_TM1
     elif [[ $platform == "tv" ]]; then
-      PROFILE=tztv_v3.0_arm-wayland
+      PROFILE=tztv_v3.0_arm-jazzm
     elif [[ $platform == "wearable" ]]; then
-      PROFILE=tzwr_v3.0_arm-wayland
+      PROFILE=tzwr_v3.0_target-circle
     elif [[ $platform == "ivi" ]]; then
       PROFILE=tzivi_v3.0_arm
     elif [[ $platform == "common" ]]; then
@@ -48,7 +48,7 @@ function setupAndExecuteTargetBuild() {
 
   if [ "$ARCHITECTURE" == "" ]; then
     if [[ $platform == "mobile" ]]; then
-      ARCHITECTURE=aarch64
+      ARCHITECTURE=armv7l
     elif [[ $platform == "tv" ]]; then
       ARCHITECTURE=armv7l
     elif [[ $platform == "wearable" ]]; then

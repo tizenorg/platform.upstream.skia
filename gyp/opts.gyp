@@ -7,6 +7,7 @@
   # Source lists live in opts.gypi.  This makes it easier to maintain our Chrome GYP/GN setup.
   # (To be honest, I'm not sure why we need to include common.gypi.  I thought it was automatic.)
   'variables': {
+    'building_for_tizen%': 0,
     'includes': [ 'common.gypi', 'opts.gypi' ],
   },
 
@@ -32,7 +33,7 @@
         '../include/utils',
       ],
       'conditions': [
-        [ '"x86" in skia_arch_type and skia_os != "ios" and building_for_tizen != 1', {
+        [ '"x86" in skia_arch_type and skia_os != "ios" and building_for_tizen == 1', {
           'cflags': [ '-msse2' ],
           'dependencies': [ 'opts_ssse3', 'opts_sse41', 'opts_sse42', 'opts_avx', 'opts_avx2' ],
           'sources': [ '<@(sse2_sources)' ],
