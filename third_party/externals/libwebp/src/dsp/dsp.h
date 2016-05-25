@@ -73,7 +73,7 @@ extern "C" {
 // inline assembly would need to be modified for use with Native Client.
 #if (defined(__ARM_NEON__) || defined(WEBP_ANDROID_NEON) || \
      defined(__aarch64__)) && !defined(__native_client__)
-//#define WEBP_USE_NEON
+#define WEBP_USE_NEON
 #endif
 
 #if defined(_MSC_VER) && _MSC_VER >= 1700 && defined(_M_ARM)
