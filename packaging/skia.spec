@@ -40,7 +40,7 @@ Source1:    skia.manifest
 %define chromium_efl_tizen_profile ivi
 %endif
 
-BuildRequires: expat-devel, python, python-xml, git
+BuildRequires: expat-devel, python, python-xml
 %ifarch armv7l
 BuildRequires: python-accel-armv7l-cross-arm
 %endif
@@ -125,15 +125,7 @@ export GYP_GENERATOR_FLAGS="output_dir=${GYP_GENERATOR_OUTPUT}"
     -Denable_test=0
 %endif
 
-%ifarch %{arm}
-./build/prebuild/ninja/ninja.arm %{?_smp_mflags} -C%{OUTPUT_FOLDER}
-%else
-%ifarch aarch64
-./build/prebuild/ninja/ninja.arm64 %{?_smp_mflags} -C%{OUTPUT_FOLDER}
-%else
 ./build/prebuild/ninja/ninja %{?_smp_mflags} -C%{OUTPUT_FOLDER}
-%endif
-%endif
 
 %install
 install -d %{buildroot}%{_libdir}/pkgconfig
