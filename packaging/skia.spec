@@ -5,7 +5,6 @@ Release:    0
 Group:      System/API
 License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
-Source1:    skia.manifest
 
 # Conditions for OBS build
 # The OBS build does not support running script 'build_{target}.sh'.
@@ -40,7 +39,7 @@ Source1:    skia.manifest
 %define chromium_efl_tizen_profile ivi
 %endif
 
-BuildRequires: expat-devel, python, python-xml, git
+BuildRequires: expat-devel, python, python-xml
 %ifarch armv7l
 BuildRequires: python-accel-armv7l-cross-arm
 %endif
@@ -125,31 +124,23 @@ export GYP_GENERATOR_FLAGS="output_dir=${GYP_GENERATOR_OUTPUT}"
     -Denable_test=0
 %endif
 
-%ifarch %{arm}
-./build/prebuild/ninja/ninja.arm %{?_smp_mflags} -C%{OUTPUT_FOLDER}
-%else
-%ifarch aarch64
-./build/prebuild/ninja/ninja.arm64 %{?_smp_mflags} -C%{OUTPUT_FOLDER}
-%else
 ./build/prebuild/ninja/ninja %{?_smp_mflags} -C%{OUTPUT_FOLDER}
-%endif
-%endif
 
 %install
 install -d %{buildroot}%{_libdir}/pkgconfig
 install -d %{buildroot}%{_libdir}/skia
 install -m 0755 %{OUTPUT_FOLDER}/lib*.a %{buildroot}%{_libdir}/skia
-install -m 0644 ./packaging/skia.pc %{buildroot}%{_libdir}/pkgconfig/
+install -m 0644 ./build/pkgconfig/skia.pc %{buildroot}%{_libdir}/pkgconfig/
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 %files
-%manifest packaging/skia.manifest
+%manifest ./build/manifest/skia.manifest
 %{_libdir}/skia/lib*.a
 
 %files devel
-%manifest packaging/skia.manifest
+%manifest ./build/manifest/skia.manifest
 %{_libdir}/skia/lib*.a
 %{_libdir}/pkgconfig/skia.pc
