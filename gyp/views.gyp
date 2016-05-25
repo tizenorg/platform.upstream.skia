@@ -114,7 +114,7 @@
           '../src/views/mac/skia_mac.mm',
           ],
         }],
-        [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"]', {
+        [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"] and not building_for_tizen', {
           'link_settings': {
             'libraries': [
               '-lGL',

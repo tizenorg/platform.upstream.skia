@@ -20,14 +20,16 @@ EOF
 
 case "$OS" in
   Linux)
+    LONG_BIT=$(getconf LONG_BIT)
     MACHINE=$(uname -m)
+    NINJA="${THIS_DIR}/ninja-linux${LONG_BIT}"
     case "$MACHINE" in
-      i?86|x86_64)
-        LONG_BIT=$(getconf LONG_BIT)
-        # We know we are on x86 but we need to use getconf to determine
-        # bittage of the userspace install (e.g. when runing 32-bit userspace
-        # on x86_64 kernel)
-        exec "${THIS_DIR}/ninja-linux${LONG_BIT}" "$@";;
+      x86_64|aarch64)
+        exec "${NINJA}.all" "$@";;
+      armv7l)
+        exec "${NINJA}.armv7l" "$@";;
+      i?86)
+        exec "${NINJA}.ix86" "$@";;
       *)
         echo Unknown architecture \($MACHINE\) -- unable to run ninja.
         print_help

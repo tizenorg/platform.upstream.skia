@@ -36,6 +36,9 @@
   # which deals with these same constraints in a similar manner.
   #
   'variables': {  # level 1
+    'includes': [
+      'tizen_variables.gypi',
+    ],
     'angle_path%': '../',
     'variables': {  # level 2
 

@@ -5,7 +5,6 @@ Release:    0
 Group:      System/API
 License:    Apache-2.0
 Source0:    %{name}-%{version}.tar.gz
-Source1:    skia.manifest
 
 # Conditions for OBS build
 # The OBS build does not support running script 'build_{target}.sh'.
@@ -40,7 +39,7 @@ Source1:    skia.manifest
 %define chromium_efl_tizen_profile ivi
 %endif
 
-BuildRequires: expat-devel, python, python-xml, git
+BuildRequires: expat-devel, python, python-xml
 %ifarch armv7l
 BuildRequires: python-accel-armv7l-cross-arm
 %endif
@@ -48,6 +47,7 @@ BuildRequires: python-accel-armv7l-cross-arm
 BuildRequires: python-accel-aarch64-cross-aarch64
 %endif
 
+BuildRequires: binutils-gold
 BuildRequires: pkgconfig(icu-i18n)
 BuildRequires: pkgconfig(fontconfig)
 BuildRequires: pkgconfig(gles20)
@@ -120,36 +120,48 @@ export GYP_GENERATOR_FLAGS="output_dir=${GYP_GENERATOR_OUTPUT}"
 
 ./gyp_skia.sh \
 %if %{!?_enable_test:0}%{?_enable_test:1}
-    -Denable_test=1
+    -Denable_test=1 \
 %else
-    -Denable_test=0
+    -Denable_test=0 \
+%endif
+%ifarch %{arm}
+    -Dsupport_arm=1
+%else
+    -Dsupport_arm=0
 %endif
 
-%ifarch %{arm}
-./build/prebuild/ninja/ninja.arm %{?_smp_mflags} -C%{OUTPUT_FOLDER}
-%else
-%ifarch aarch64
-./build/prebuild/ninja/ninja.arm64 %{?_smp_mflags} -C%{OUTPUT_FOLDER}
-%else
 ./build/prebuild/ninja/ninja %{?_smp_mflags} -C%{OUTPUT_FOLDER}
-%endif
-%endif
 
 %install
 install -d %{buildroot}%{_libdir}/pkgconfig
 install -d %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/lib*.a %{buildroot}%{_libdir}/skia
-install -m 0644 ./packaging/skia.pc %{buildroot}%{_libdir}/pkgconfig/
+install -m 0755 %{OUTPUT_FOLDER}/libetc1.a           %{buildroot}%{_libdir}/skia
+install -m 0755 %{OUTPUT_FOLDER}/libpng_static.a     %{buildroot}%{_libdir}/skia
+install -m 0755 %{OUTPUT_FOLDER}/libskia_codec.a     %{buildroot}%{_libdir}/skia
+install -m 0755 %{OUTPUT_FOLDER}/libskia_core.a      %{buildroot}%{_libdir}/skia
+install -m 0755 %{OUTPUT_FOLDER}/libskia_effects.a   %{buildroot}%{_libdir}/skia
+install -m 0755 %{OUTPUT_FOLDER}/libskia_images.a    %{buildroot}%{_libdir}/skia
+install -m 0755 %{OUTPUT_FOLDER}/libskia_opts.a      %{buildroot}%{_libdir}/skia
+%ifarch %{arm}
+install -m 0755 %{OUTPUT_FOLDER}/libskia_opts_neon.a %{buildroot}%{_libdir}/skia
+%endif
+install -m 0755 %{OUTPUT_FOLDER}/libskia_pdf.a       %{buildroot}%{_libdir}/skia
+install -m 0755 %{OUTPUT_FOLDER}/libskia_ports.a     %{buildroot}%{_libdir}/skia
+install -m 0755 %{OUTPUT_FOLDER}/libskia_sfnt.a      %{buildroot}%{_libdir}/skia
+install -m 0755 %{OUTPUT_FOLDER}/libskia_skgpu.a     %{buildroot}%{_libdir}/skia
+install -m 0755 %{OUTPUT_FOLDER}/libskia_utils.a     %{buildroot}%{_libdir}/skia
+install -m 0755 %{OUTPUT_FOLDER}/libSkKTX.a          %{buildroot}%{_libdir}/skia
+install -m 0644 ./build/pkgconfig/skia.pc            %{buildroot}%{_libdir}/pkgconfig/
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 %files
-%manifest packaging/skia.manifest
+%manifest ./build/manifest/skia.manifest
 %{_libdir}/skia/lib*.a
 
 %files devel
-%manifest packaging/skia.manifest
+%manifest ./build/manifest/skia.manifest
 %{_libdir}/skia/lib*.a
 %{_libdir}/pkgconfig/skia.pc
