@@ -12,7 +12,7 @@ function error_report() {
 
 function getHostArch() {
   echo $(uname -m | sed -e \
-      's/i.86/ia32/;s/x86_64/x64/;s/amd64/x64/;s/arm.*/arm/;s/i86pc/ia32/;s/aarch64/arm64/')
+      's/i.86/x86/;s/x86_64/x86_64/;s/amd64/x64/;s/arm.*/arm/;s/i86pc/ia32/;s/aarch64/arm64/')
 }
 
 function setupAndExecuteTargetBuild() {

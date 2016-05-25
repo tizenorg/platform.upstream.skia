@@ -15,6 +15,9 @@
       'product_name': 'skia_views',
       'type': 'static_library',
       'standalone_static_library': 1,
+      'variables': {
+        'building_for_tizen%': 0,
+      },
       'dependencies': [
         'skia_lib.gyp:skia_lib',
         'xml.gyp:xml',
@@ -114,7 +117,7 @@
           '../src/views/mac/skia_mac.mm',
           ],
         }],
-        [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"]', {
+        [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "chromeos"] and not building_for_tizen', {
           'link_settings': {
             'libraries': [
               '-lGL',

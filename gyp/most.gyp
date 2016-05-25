@@ -15,6 +15,9 @@
     {
       'target_name': 'most',
       'type': 'none',
+      'variables': {
+        'test%': 0,
+      },
       'dependencies': [
         # The minimal set of static libraries for basic Skia functionality.
         'skia_lib.gyp:skia_lib',

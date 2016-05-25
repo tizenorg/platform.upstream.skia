@@ -51,6 +51,7 @@
         'skia_os%': '<(skia_os)',
 
         'skia_android_framework%': 0,
+        'building_for_tizen%': 0,
         'conditions' : [
           [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "mac"]', {
             'skia_arch_type%': 'x86_64',

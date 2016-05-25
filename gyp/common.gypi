@@ -22,6 +22,8 @@
     # combinations work.  You should only override 'skia_os' for certain
     # situations, like building for iOS on a Mac.
     'variables': {
+      'building_for_tizen%': 0,
+      'test%': 0,
       'conditions': [
         [ 'skia_os != OS and not ((skia_os == "ios" and OS == "mac") or \
                                   (skia_os == "chromeos" and OS == "linux"))', {

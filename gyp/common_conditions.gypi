@@ -12,6 +12,9 @@
     'SK_SUPPORT_OPENCL=<(skia_opencl)',
     'SK_FORCE_DISTANCE_FIELD_TEXT=<(skia_force_distance_field_text)',
   ],
+  'variables': {
+    'building_for_tizen%': 0,
+  },
   'conditions' : [
     ['skia_pic', {
      'cflags': [

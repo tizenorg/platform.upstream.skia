@@ -39,6 +39,9 @@
     {
       'target_name': 'skia_lib',
       'sources': [ '<(skia_src_path)/core/SkForceCPlusPlusLinking.cpp', ],
+      'variables': {
+        'building_for_tizen%': 0,
+      },
       'conditions': [
         [ 'skia_shared_lib', {
           'conditions': [

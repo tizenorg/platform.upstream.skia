@@ -13,6 +13,10 @@
     {
       'target_name': 'alltargets',
       'type': 'none',
+      'variables': {
+        'building_for_tizen%': 0,
+        'test%': 0,
+      },
       'dependencies': [
         'gyp/everything.gyp:everything',
         'gyp/most.gyp:most',

@@ -27,3 +27,4 @@ xcodebuild
 build_result.txt
 out.*
 *.list
+*.orig

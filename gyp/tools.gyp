@@ -16,6 +16,9 @@
       # Build all executable targets defined below.
       'target_name': 'tools',
       'type': 'none',
+      'variables': {
+        'test%': 0,
+      },
       'dependencies': [
         'bench_pictures',
         'bitmap_region_decoder',
