@@ -13,6 +13,11 @@
     'SK_FORCE_DISTANCE_FIELD_TEXT=<(skia_force_distance_field_text)',
   ],
   'conditions' : [
+    ['building_for_tizen==1', {
+      'includes': [
+        'tizen_conditions.gypi',
+      ]
+    }],
     ['skia_pic', {
      'cflags': [
        '-fPIC',
