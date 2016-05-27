@@ -12,7 +12,6 @@
 .settings/
 TAGS
 bower_components
-common
 gyp/build
 out
 platform_tools/android/apps/build
