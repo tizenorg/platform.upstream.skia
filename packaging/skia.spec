@@ -111,6 +111,9 @@ export GYP_GENERATOR_OUTPUT=$PWD/%{OUTPUT_BASE_FOLDER}
 export SKIA_GYP_OUTPUT_DIR=$PWD/%{OUTPUT_BASE_FOLDER}
 export GYP_GENERATOR_FLAGS="output_dir=${GYP_GENERATOR_OUTPUT}"
 
+%global SKIA_INCLUDE %{_includedir}/chromium/third_party/skia
+%global SKIA_LIB %{_libdir}/chromium/third_party/skia
+
 #set build mode
 %if 0%{?_debug_mode}
 %global OUTPUT_FOLDER %{OUTPUT_BASE_FOLDER}/Debug
@@ -133,35 +136,74 @@ export GYP_GENERATOR_FLAGS="output_dir=${GYP_GENERATOR_OUTPUT}"
 ./build/prebuild/ninja/ninja %{?_smp_mflags} -C%{OUTPUT_FOLDER}
 
 %install
+
 install -d %{buildroot}%{_libdir}/pkgconfig
-install -d %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libetc1.a           %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libpng_static.a     %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libskia_codec.a     %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libskia_core.a      %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libskia_effects.a   %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libskia_images.a    %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libskia_opts.a      %{buildroot}%{_libdir}/skia
+install -d %{buildroot}%{SKIA_LIB}/skia
+install -d %{buildroot}%{SKIA_INCLUDE}/animator
+install -d %{buildroot}%{SKIA_INCLUDE}/c
+install -d %{buildroot}%{SKIA_INCLUDE}/include/codec
+install -d %{buildroot}%{SKIA_INCLUDE}/include/config
+install -d %{buildroot}%{SKIA_INCLUDE}/include/core
+install -d %{buildroot}%{SKIA_INCLUDE}/include/device/xps
+install -d %{buildroot}%{SKIA_INCLUDE}/include/effects
+install -d %{buildroot}%{SKIA_INCLUDE}/include/gpu/effects
+install -d %{buildroot}%{SKIA_INCLUDE}/include/gpu/gl
+install -d %{buildroot}%{SKIA_INCLUDE}/include/images
+install -d %{buildroot}%{SKIA_INCLUDE}/include/pathops
+install -d %{buildroot}%{SKIA_INCLUDE}/include/pipe
+install -d %{buildroot}%{SKIA_INCLUDE}/include/ports
+install -d %{buildroot}%{SKIA_INCLUDE}/include/private
+install -d %{buildroot}%{SKIA_INCLUDE}/include/svg
+install -d %{buildroot}%{SKIA_INCLUDE}/include/utils
+install -d %{buildroot}%{SKIA_INCLUDE}/include/views
+install -d %{buildroot}%{SKIA_INCLUDE}/include/xml
+install -d %{buildroot}%{SKIA_INCLUDE}/src/core
+install -m 0644 ./build/pkgconfig/skia.pc                   %{buildroot}%{_libdir}/pkgconfig/
+install -m 0644 %{OUTPUT_FOLDER}/libetc1.a                  %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libpng_static.a            %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_codec.a            %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_core.a             %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_effects.a          %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_icuuc.a            %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_images.a           %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_opts.a             %{buildroot}%{SKIA_LIB}/
 %ifarch %{arm}
-install -m 0755 %{OUTPUT_FOLDER}/libskia_opts_neon.a %{buildroot}%{_libdir}/skia
+install -m 0644 %{OUTPUT_FOLDER}/libskia_opts_neon.a        %{buildroot}%{SKIA_LIB}/
 %endif
-install -m 0755 %{OUTPUT_FOLDER}/libskia_pdf.a       %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libskia_ports.a     %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libskia_sfnt.a      %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libskia_skgpu.a     %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libskia_utils.a     %{buildroot}%{_libdir}/skia
-install -m 0755 %{OUTPUT_FOLDER}/libSkKTX.a          %{buildroot}%{_libdir}/skia
-install -m 0644 ./build/pkgconfig/skia.pc            %{buildroot}%{_libdir}/pkgconfig/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_pdf.a              %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_ports.a            %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_sfnt.a             %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_sfntly.a           %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_skgpu.a            %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libskia_utils.a            %{buildroot}%{SKIA_LIB}/
+install -m 0644 %{OUTPUT_FOLDER}/libSkKTX.a                 %{buildroot}%{SKIA_LIB}/
+install -m 0644 ./include/animator/*.h                      %{buildroot}%{SKIA_INCLUDE}/animator/
+install -m 0644 ./include/c/*.h                             %{buildroot}%{SKIA_INCLUDE}/c/
+install -m 0644 ./include/codec/*.h                         %{buildroot}%{SKIA_INCLUDE}/include/codec/
+install -m 0644 ./include/config/*.h                        %{buildroot}%{SKIA_INCLUDE}/include/config/
+install -m 0644 ./include/core/*.h                          %{buildroot}%{SKIA_INCLUDE}/include/core/
+install -m 0644 ./include/device/xps/*.h                    %{buildroot}%{SKIA_INCLUDE}/include/device/xps
+install -m 0644 ./include/effects/*.h                       %{buildroot}%{SKIA_INCLUDE}/include/effects/
+install -m 0644 ./include/gpu/*.h                           %{buildroot}%{SKIA_INCLUDE}/include/gpu/
+install -m 0644 ./include/gpu/effects/*.h                   %{buildroot}%{SKIA_INCLUDE}/include/gpu/effects/
+install -m 0644 ./include/gpu/gl/*.h                        %{buildroot}%{SKIA_INCLUDE}/include/gpu/gl
+install -m 0644 ./include/images/*.h                        %{buildroot}%{SKIA_INCLUDE}/include/images/
+install -m 0644 ./include/pathops/*.h                       %{buildroot}%{SKIA_INCLUDE}/include/pathops/
+install -m 0644 ./include/pipe/*.h                          %{buildroot}%{SKIA_INCLUDE}/include/pipe/
+install -m 0644 ./include/ports/*.h                         %{buildroot}%{SKIA_INCLUDE}/include/ports/
+install -m 0644 ./include/private/*.h                       %{buildroot}%{SKIA_INCLUDE}/include/private/
+install -m 0644 ./include/svg/*.h                           %{buildroot}%{SKIA_INCLUDE}/include/svg/
+install -m 0644 ./include/utils/*.h                         %{buildroot}%{SKIA_INCLUDE}/include/utils/
+install -m 0644 ./include/views/*.h                         %{buildroot}%{SKIA_INCLUDE}/include/views/
+install -m 0644 ./include/xml/*.h                           %{buildroot}%{SKIA_INCLUDE}/include/xml/
+install -m 0644 ./src/core/*.h                              %{buildroot}%{SKIA_INCLUDE}/src/core/
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
-%files
-%manifest ./build/manifest/skia.manifest
-%{_libdir}/skia/lib*.a
-
 %files devel
 %manifest ./build/manifest/skia.manifest
-%{_libdir}/skia/lib*.a
 %{_libdir}/pkgconfig/skia.pc
+%{SKIA_LIB}/lib*.a
+%{SKIA_INCLUDE}

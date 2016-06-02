@@ -13,7 +13,9 @@
   'targets': [
     {
       'target_name': 'icuuc',
+      'product_name': 'skia_icuuc',
       'type': '<(component)',
+      'standalone_static_library': 1,
       'sources': [
         '<!@(python find.py ../third_party/externals/icu/source/common "*.c*")'
       ],
