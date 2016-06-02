@@ -1,11 +1,11 @@
 prefix=/usr
 exec_prefix=${prefix}
 libdir=${prefix}/lib/skia
-includedir=${prefix}/include
+includedir=${prefix}/include/chromium/third_party/skia
 
 Name: skia
 Description: This is skia library
 Version: 5.0.5
 
-Libs: -L${libdir} $(libdir)/usr/lib/skia/libetc1.a $(libdir)/usr/lib/skia/libpng_static.a $(libdir)/usr/lib/skia/libskia_codec.a $(libdir)/usr/lib/skia/libskia_core.a $(libdir)/usr/lib/skia/libskia_effects.a $(libdir)/usr/lib/skia/libskia_images.a $(libdir)/usr/lib/skia/libskia_opts.a $(libdir)/usr/lib/skia/libskia_opts_neon.a $(libdir)/usr/lib/skia/libskia_pdf.a $(libdir)/usr/lib/skia/libskia_ports.a $(libdir)/usr/lib/skia/libskia_sfnt.a $(libdir)/usr/lib/skia/libskia_skgpu.a $(libdir)/usr/lib/skia/libskia_utils.a $(libdir)/usr/lib/skia/libSkKTX.a
-Cflags: -I${includedir}/skia
+Libs: -L${libdir}
+Cflags: -I${includedir}
