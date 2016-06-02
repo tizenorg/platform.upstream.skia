@@ -5,7 +5,9 @@
   'targets': [
     {
       'target_name': 'sfntly',
+      'product_name': 'skia_sfntly',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'includes': [
         'common_conditions.gypi',
         'common_variables.gypi',
